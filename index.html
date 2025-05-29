@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Password Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .input-group {
+      margin: 10px 0;
+      text-align: left;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #passwordDisplay {
+      font-weight: bold;
+      margin-top: 15px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Password Generator</h2>
+    <div class="input-group">
+      <label>Password Length</label>
+      <input type="number" id="length" min="4" max="50" value="12">
+    </div>
+    <div class="input-group">
+      <label><input type="checkbox" id="uppercase" checked> Include Uppercase</label><br>
+      <label><input type="checkbox" id="lowercase" checked> Include Lowercase</label><br>
+      <label><input type="checkbox" id="numbers" checked> Include Numbers</label><br>
+      <label><input type="checkbox" id="symbols" checked> Include Symbols</label>
+    </div>
+    <button onclick="generatePassword()">Generate</button>
+    <p id="passwordDisplay"></p>
+    <button onclick="copyPassword()">Copy</button>
+  </div>
+
+  <script>
+    function generatePassword() {
+      const length = document.getElementById("length").value;
+      const includeUppercase = document.getElementById("uppercase").checked;
+      const includeLowercase = document.getElementById("lowercase").checked;
+      const includeNumbers = document.getElementById("numbers").checked;
+      const includeSymbols = document.getElementById("symbols").checked;
+
+      const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const lowercase = "abcdefghijklmnopqrstuvwxyz";
+      const numbers = "0123456789";
+      const symbols = "!@#$%^&*()_+[]{}|;:,.<>?";
+
+      let characters = "";
+      if (includeUppercase) characters += uppercase;
+      if (includeLowercase) characters += lowercase;
+      if (includeNumbers) characters += numbers;
+      if (includeSymbols) characters += symbols;
+
+      if (characters.length === 0) {
+        document.getElementById("passwordDisplay").innerText = "Select at least one option.";
+        return;
+      }
+
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters[randomIndex];
+      }
+
+      document.getElementById("passwordDisplay").innerText = password;
+    }
+
+    function copyPassword() {
+      const password = document.getElementById("passwordDisplay").innerText;
+      if (!password) return alert("Nothing to copy!");
+      
+      navigator.clipboard.writeText(password).then(() => {
+        alert("Password copied to clipboard!");
+      });
+    }
+  </script>
+</body>
+</html>
